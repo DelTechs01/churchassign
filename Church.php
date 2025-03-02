@@ -31,4 +31,20 @@ echo "</table>";
 } else {
     echo "No Members Found";
 }
+
+#Processing form data and add to the database
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST['name'];
+    $tithe_number = $_POST['tithe_number'];
+    $registration_number = $_POST['registration_number'];
+    $stmt = $conn-> prepare("INSERT INTO members (name, tithe_number, registration_number) VALUES(?, ?, ?)"); #prepare the statement
+    $stmt -> bind_param("sss", $name, $tithe_number, $registration_number); #binding the parameters
+    if($stmt-> execute()) {
+    echo "<p>New Member Added Succesfully.</p>";
+    } else {
+        echo "<p>Error adding member: " . $conn -> error ."</p>";
+    }
+    $stmt -> close();
+}
+$conn ->close();
 ?>
